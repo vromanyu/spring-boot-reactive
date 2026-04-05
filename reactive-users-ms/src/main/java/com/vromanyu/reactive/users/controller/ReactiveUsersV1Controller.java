@@ -9,11 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
 import reactor.util.Loggers;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.UUID;
 
 @RestController
@@ -46,5 +48,23 @@ public class ReactiveUsersV1Controller {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<GetReactiveUserResponse>> getReactiveUser(@PathVariable String uuid) {
         return Mono.just(ResponseEntity.ok(new GetReactiveUserResponse(uuid, "John", "Doe", "johndoe@gmail.com")));
+    }
+
+    @GetMapping(
+            produces = MediaType.TEXT_EVENT_STREAM_VALUE
+    )
+    public ResponseEntity<Flux<GetReactiveUserResponse>> getAllReactiveUsers(ServerHttpRequest request) {
+        return ResponseEntity.ok(Flux.just(
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"))
+                .delayElements(Duration.ofSeconds(1)).doOnCancel(() -> reactiveLogger.info("request: {} was cancelled", request.getId())));
     }
 }
