@@ -33,6 +33,7 @@ public class ReactiveUsersV1Controller {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<CreatedReactiveUserResponse>> createReactiveUser(@RequestBody @Valid Mono<CreateReactiveUserRequest> createUserRequest,
                                                                                 ServerHttpRequest request) {
+        reactiveLogger.info("Received request to create reactive user: {}", createUserRequest);
         URI requestURI = request.getURI();
         return reactiveUserService.createReactiveUser(createUserRequest)
                 .map(createdReactiveUserResponse -> ResponseEntity.created(UriComponentsBuilder.fromUri(requestURI).pathSegment(createdReactiveUserResponse.uuid()).build().toUri()).body(createdReactiveUserResponse));
@@ -42,6 +43,7 @@ public class ReactiveUsersV1Controller {
             value = "/{uuid}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<GetReactiveUserResponse>> getReactiveUser(@PathVariable String uuid) {
+        reactiveLogger.info("Received request to get reactive user: {}", uuid);
         return reactiveUserService.getReactiveUser(uuid).map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
@@ -51,6 +53,7 @@ public class ReactiveUsersV1Controller {
     )
     public ResponseEntity<Flux<GetReactiveUserResponse>> getAllReactiveUsers(@RequestParam(value = "offset", defaultValue = "0") int offset,
                                                                              @RequestParam(value = "limit", defaultValue = "0") int limit) {
+        reactiveLogger.info("Received request to get all reactive users");
         return ResponseEntity.ok(reactiveUserService.getAllReactiveUsers(offset, limit));
     }
 }
