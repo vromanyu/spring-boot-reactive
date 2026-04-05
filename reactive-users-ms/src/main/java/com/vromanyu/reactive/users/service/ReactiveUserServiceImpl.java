@@ -2,6 +2,7 @@ package com.vromanyu.reactive.users.service;
 
 import com.vromanyu.reactive.users.dto.CreateReactiveUserRequest;
 import com.vromanyu.reactive.users.dto.CreatedReactiveUserResponse;
+import com.vromanyu.reactive.users.dto.GetReactiveUserResponse;
 import com.vromanyu.reactive.users.entity.ReactiveUser;
 import com.vromanyu.reactive.users.repository.ReactiveUserRepository;
 import org.springframework.stereotype.Service;
@@ -41,4 +42,15 @@ public class ReactiveUserServiceImpl implements ReactiveUserService {
                         savedEntity.getEmail()));
     }
 
+    @Override
+    public Mono<GetReactiveUserResponse> getReactiveUser(String uuid) {
+        return reactiveUserRepository.findByUuid(uuid)
+                .log(reactiveLogger)
+                .map(reactiveUser -> new GetReactiveUserResponse(
+                        reactiveUser.getUuid(),
+                        reactiveUser.getFirstName(),
+                        reactiveUser.getLastName(),
+                        reactiveUser.getEmail()
+                ));
+    }
 }

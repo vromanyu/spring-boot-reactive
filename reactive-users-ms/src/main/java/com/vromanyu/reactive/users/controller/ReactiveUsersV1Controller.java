@@ -44,7 +44,8 @@ public class ReactiveUsersV1Controller {
             value = "/{uuid}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<GetReactiveUserResponse>> getReactiveUser(@PathVariable String uuid) {
-        return Mono.just(ResponseEntity.ok(new GetReactiveUserResponse(uuid, "John", "Doe", "johndoe@gmail.com")));
+        return reactiveUserService.getReactiveUser(uuid).map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @GetMapping(
