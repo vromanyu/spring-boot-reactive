@@ -24,6 +24,7 @@ public class ReactiveUser {
 
     @Column("password")
     private String password;
+
     public ReactiveUser() {
     }
 
