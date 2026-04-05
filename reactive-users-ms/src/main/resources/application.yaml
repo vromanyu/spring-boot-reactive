@@ -1,3 +1,14 @@
 spring:
   application:
     name: reactive-users-ms
+  r2dbc:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: r2dbc:postgresql://localhost:5432/${DB_NAME}
+  flyway:
+    enabled: true
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/${DB_NAME}
+    locations: classpath:db/migration
+    default-schema: reactive_users
