@@ -1,6 +1,6 @@
 package com.vromanyu.reactive.users.dto;
 
-public record CreatedUserResponse(
+public record CreatedReactiveUserResponse(
         String uuid,
         String firstName,
         String lastName,
