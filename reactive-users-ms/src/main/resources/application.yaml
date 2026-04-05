@@ -12,3 +12,6 @@ spring:
     url: jdbc:postgresql://localhost:5432/${DB_NAME}
     locations: classpath:db/migration
     default-schema: reactive_users
+  web:
+    error:
+      include-binding-errors: always
