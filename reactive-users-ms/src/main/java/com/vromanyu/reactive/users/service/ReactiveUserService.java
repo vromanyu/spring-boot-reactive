@@ -7,5 +7,6 @@ import reactor.core.publisher.Mono;
 
 public interface ReactiveUserService {
     Mono<CreatedReactiveUserResponse> createReactiveUser(Mono<CreateReactiveUserRequest> createReactiveUserRequest);
+
     Mono<GetReactiveUserResponse> getReactiveUser(String uuid);
 }
