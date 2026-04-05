@@ -7,5 +7,6 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>reactive-users-ms</module>
     </modules>
 </project>
