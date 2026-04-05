@@ -16,8 +16,6 @@ import reactor.util.Logger;
 import reactor.util.Loggers;
 
 import java.net.URI;
-import java.time.Duration;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v{version}/reactive-users")
@@ -52,21 +50,7 @@ public class ReactiveUsersV1Controller {
             produces = MediaType.TEXT_EVENT_STREAM_VALUE
     )
     public ResponseEntity<Flux<GetReactiveUserResponse>> getAllReactiveUsers(@RequestParam(value = "offset", defaultValue = "0") int offset,
-                                                                             @RequestParam(value = "limit", defaultValue = "0") int limit,
-                                                                             ServerHttpRequest request) {
-        return ResponseEntity.ok(Flux.just(
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"))
-                .skip(offset)
-                .take(limit)
-                .delayElements(Duration.ofSeconds(1)).doOnCancel(() -> reactiveLogger.info("request: {} was cancelled", request.getId())));
+                                                                             @RequestParam(value = "limit", defaultValue = "0") int limit) {
+        return ResponseEntity.ok(reactiveUserService.getAllReactiveUsers(offset, limit));
     }
 }

@@ -7,6 +7,7 @@ import com.vromanyu.reactive.users.entity.ReactiveUser;
 import com.vromanyu.reactive.users.repository.ReactiveUserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
 import reactor.util.Loggers;
@@ -46,6 +47,20 @@ public class ReactiveUserServiceImpl implements ReactiveUserService {
     public Mono<GetReactiveUserResponse> getReactiveUser(String uuid) {
         return reactiveUserRepository.findByUuid(uuid)
                 .log(reactiveLogger)
+                .map(reactiveUser -> new GetReactiveUserResponse(
+                        reactiveUser.getUuid(),
+                        reactiveUser.getFirstName(),
+                        reactiveUser.getLastName(),
+                        reactiveUser.getEmail()
+                ));
+    }
+
+    @Override
+    public Flux<GetReactiveUserResponse> getAllReactiveUsers(int offset, int limit) {
+        return reactiveUserRepository.findAll()
+                .log(reactiveLogger)
+                .skip(offset)
+                .take(limit)
                 .map(reactiveUser -> new GetReactiveUserResponse(
                         reactiveUser.getUuid(),
                         reactiveUser.getFirstName(),
