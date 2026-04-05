@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 import reactor.util.Logger;
@@ -42,5 +39,12 @@ public class ReactiveUsersV1Controller {
                             .toUri();
                     return ResponseEntity.created(location).body(res);
                 });
+    }
+
+    @GetMapping(
+            value = "/{uuid}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<GetReactiveUserResponse>> getReactiveUser(@PathVariable String uuid) {
+        return Mono.just(ResponseEntity.ok(new GetReactiveUserResponse(uuid, "John", "Doe", "johndoe@gmail.com")));
     }
 }
