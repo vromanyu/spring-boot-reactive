@@ -3,6 +3,7 @@ package com.vromanyu.reactive.users.controller;
 import com.vromanyu.reactive.users.dto.CreateReactiveUserRequest;
 import com.vromanyu.reactive.users.dto.CreatedReactiveUserResponse;
 import com.vromanyu.reactive.users.dto.GetReactiveUserResponse;
+import com.vromanyu.reactive.users.service.ReactiveUserService;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,24 +24,20 @@ import java.util.UUID;
 public class ReactiveUsersV1Controller {
 
     private static final Logger reactiveLogger = Loggers.getLogger(ReactiveUsersV1Controller.class);
+    private final ReactiveUserService reactiveUserService;
+
+    public ReactiveUsersV1Controller(ReactiveUserService reactiveUserService) {
+        this.reactiveUserService = reactiveUserService;
+    }
 
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<CreatedReactiveUserResponse>> createReactiveUser(@RequestBody @Valid Mono<CreateReactiveUserRequest> createUserRequest,
                                                                                 ServerHttpRequest request) {
-        return createUserRequest.log(reactiveLogger)
-                .map(req -> new CreatedReactiveUserResponse(UUID.randomUUID().toString(),
-                        req.firstName(),
-                        req.lastName(),
-                        req.email()))
-                .map(res -> {
-                    URI location = UriComponentsBuilder.fromUri(request.getURI())
-                            .path("/{uuid}")
-                            .buildAndExpand(res.uuid())
-                            .toUri();
-                    return ResponseEntity.created(location).body(res);
-                });
+        URI requestURI = request.getURI();
+        return reactiveUserService.createReactiveUser(createUserRequest)
+                .map(createdReactiveUserResponse -> ResponseEntity.created(UriComponentsBuilder.fromUri(requestURI).pathSegment(createdReactiveUserResponse.uuid()).build().toUri()).body(createdReactiveUserResponse));
     }
 
     @GetMapping(
