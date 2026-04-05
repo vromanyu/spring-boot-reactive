@@ -1,7 +1,8 @@
 package com.vromanyu.reactive.users.controller;
 
-import com.vromanyu.reactive.users.dto.CreateUserRequest;
-import com.vromanyu.reactive.users.dto.CreatedUserResponse;
+import com.vromanyu.reactive.users.dto.CreateReactiveUserRequest;
+import com.vromanyu.reactive.users.dto.CreatedReactiveUserResponse;
+import com.vromanyu.reactive.users.dto.GetReactiveUserResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +28,10 @@ public class ReactiveUsersV1Controller {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<CreatedUserResponse>> createReactiveUser(@RequestBody @Valid Mono<CreateUserRequest> createUserRequest,
-                                                                        ServerHttpRequest request) {
+    public Mono<ResponseEntity<CreatedReactiveUserResponse>> createReactiveUser(@RequestBody @Valid Mono<CreateReactiveUserRequest> createUserRequest,
+                                                                                ServerHttpRequest request) {
         return createUserRequest.log(reactiveLogger)
-                .map(req -> new CreatedUserResponse(UUID.randomUUID().toString(),
+                .map(req -> new CreatedReactiveUserResponse(UUID.randomUUID().toString(),
                         req.firstName(),
                         req.lastName(),
                         req.email()))
