@@ -57,18 +57,18 @@ public class ReactiveUsersV1Controller {
                                                                              @RequestParam(value = "limit", defaultValue = "0") int limit,
                                                                              ServerHttpRequest request) {
         return ResponseEntity.ok(Flux.just(
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
-                new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"))
-                        .skip(offset)
-                        .take(limit)
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"),
+                        new GetReactiveUserResponse(UUID.randomUUID().toString(), "John", "Doe", "johndoe@gmail.com"))
+                .skip(offset)
+                .take(limit)
                 .delayElements(Duration.ofSeconds(1)).doOnCancel(() -> reactiveLogger.info("request: {} was cancelled", request.getId())));
     }
 }
